@@ -17,7 +17,7 @@ The first step to analyze a queueing system is to model it.
 And for this, there is often not a better start then to build a simulation model.
 Thus, the aim of this chapter is to teach you how to construct and simulate queueing processes.
 
-In~\cref{sec:constr-discr-time} we build discrete-time models of queueing systems, which means that we use the number of jobs that arrive and can be served in a periods to construct the queueing process.
+In~\cref{sec:constr-discr-time} we build discrete-time models of queueing systems, which means that we use the number of jobs that arrive and can be served in a period to construct the queueing process.
 Such a period can be an hour, or a day; in fact, any amount of time that makes sense in the context in which the model will be used.
 Typically we model the number of arrivals and potential services as random variables, and in many practical settings it is reasonable to take the number of arrivals in a period as Poisson distributed.
 This being the case, we consider the Poisson distribution in~\cref{sec:poisson-distribution}, and once we have an understanding of this, we can use random number generators to generate (Poisson distributed) random numbers of arrivals and services to drive the simulator.
