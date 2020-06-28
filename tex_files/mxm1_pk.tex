@@ -230,10 +230,10 @@ Hence, $\E{W_Q} = \E{W_Q^B}$.
 
 \begin{exercise}\clabel{ex:57}
 Use Little's law to show that
- \begin{equation}\label{eq:96}
- \E{W^B_{Q}} = \frac{\E{L_S^B}}{1-\rho}\E{S}.
- \end{equation}
-    \begin{hint}
+\begin{equation}\label{eq:96}
+ \E{W^B_{Q}} = \frac{\E{L_S^B}}{1-\rho}\E{S}, \textrm{ hence } \E L  = \frac{\E{L_S^B}}{1-\rho}. 
+\end{equation}
+\begin{hint}
   % Use~\cref{eq:wqes}, $\E{L} = \E{L_{Q}}\E B + \E{L_S}$, where $\E{L_{Q}}$ is the number of batches in queue, and Little's law.
   Use Little's law in $\E{W_Q^B} = \E{L_Q^B} \E B \E S + \E{L_S^B}\E S$. 
 \end{hint}
@@ -243,7 +243,7 @@ Use Little's law to show that
   &= \lambda \E{W_Q^B}  \E B \E S + \E{L_S^B}\E S \\
   &= \E{W_Q^B} \rho + \E{L_S^B}\E S.
   \end{align*}
-Now simplify.
+Now simplify.  For the second relation, use that $\E{W_Q^B} = \E{W_Q} = \E L \E S$.
 \end{solution}
 \end{exercise}
 

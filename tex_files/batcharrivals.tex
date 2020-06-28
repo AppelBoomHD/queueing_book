@@ -220,8 +220,8 @@ Provide an interpretation of~\cref{eq:42} in terms of a thinned Poisson arrival 
 It is left to find the normalization constant.
 As the recursion~\cref{eq:42} does not lead to a closed form expression for $\pi(n)$, such as~\cref{eq:23}, we need to use a criterion to stop this iterative procedure.
 It is not so easy to find general conditions when to stop, but we can use a pragmatic approach.
-When the demand is finite, the numbers $\{\pi(k)\}$ should decrease geometrically fast for all $k\geq N$ where $N$\footnote{An interesting question, why should it decrease monotonically after some, large, $N$?}
-is some large number.
+When the demand is finite, the numbers $\{\pi(k)\}$ should decrease geometrically fast for all $k\geq N$ where $N$
+is some large number\footnote{An interesting question, why should it decrease monotonically after some, large, $N$?}.
 Stop when $\pi(N)\ll \pi(0)$, and take $\sum_{i=0}^N \pi(i)$ as the normalization constant.
 
 %While this is a practical approach, getting formal bounds on a proper size of $N$ requires more work than we can do here.
@@ -272,6 +272,7 @@ $\sum_{m=0}^n \pi(m) G(n-m) = \delta(n)$. The left-hand-side is clearly not equa
 \begin{equation*}
 (1- \rho) \E L = \frac{\lambda}\mu \frac{\E{B^2}}2 + \frac\rho2.
 \end{equation*}
+Observe that this is in line with~\cref{ex:57}.
 \begin{solution}
  Dividing both sides of~\cref{eq:67} by $\mu$ and using that $\lambda \E B/\mu = \rho$,
 \begin{equation*}
@@ -309,9 +310,9 @@ With this we can test the code right away.
 \begin{pyconsole}
 import numpy as np
 
-f = [0, 1] # set f[0] = 0
-F = np.cumsum(f) # distribution 
-G = np.ones_like(F) - F # survivor function
+f = [0, 1]  # set f[0] = 0
+F = np.cumsum(f)  # distribution
+G = np.ones_like(F) - F  # survivor function
 
 labda = 1
 mu = 3
@@ -319,9 +320,10 @@ num = 4
 p = np.ones(num)
 
 for n in range(1, num):
- p[n] = labda / mu * sum(p[n - 1 - i] * G[i] for i in range(min(n, len(G))))
- print(n, p[n], (labda / mu)**n)
+    p[n] = labda / mu * sum(p[n - 1 - i] * G[i] for i in range(min(n, len(G))))
+    print(n, p[n], (labda / mu) ** n)
 
+# 
 \end{pyconsole}
 The test is convincing. So now we'll move on the real problem. 
 
@@ -330,18 +332,25 @@ f = np.ones(4) / 3
 f[0] = 0
 F = np.cumsum(f)
 G = np.ones_like(F) - F
-num = 30 # stop at 80
+num = 30  # stop at 30
 p = np.ones(num)
 for n in range(1, num):
- p[n] = labda / mu * sum(p[n - 1 - i] * G[i] for i in range(min(n, len(G))))
+    p[n] = sum(p[n - 1 - m] * G[m] for m in range(min(n, len(G))))
 
-p /= p.sum() # normalize
+p *= labda / mu
+p /= p.sum()  # normalize
 \end{pyconsole}
+Here we use a small trick to speed up the computations.
+Note that $\sum_{m=0}^n \pi(m)G(n-m) = \sum_{m=0}^n \pi(n-m) G(m)$.
+We also know that $G(m)=0$ for $m$ sufficiently large; here this happens for sure when \texttt{m >= len(G)}.
+Thus, we don't have to evaluate the summation up to $n$, but we can stop once we reach \texttt{len(G)}.
+Another trick is to take the multiplication $\lambda/\mu$ out of the for-loop.
+
 
 Now that we have the probabilities we can do all experiments we like. 
 \begin{pyconsole}
-EL = sum(n*p[n] for n in range(len(p)))
-EL 
+EL = sum(n * p[n] for n in range(len(p)))
+EL
 \end{pyconsole}
 
 It is of interest to compare this result to~\cref{eq:43}.
@@ -349,12 +358,12 @@ In fact, I spent at least one hour to get~\cref{eq:43} correct; now I can finall
 
 
 \begin{pyconsole}
-EB = sum(k*fk for k,fk in enumerate(f))
-rho=labda*EB/mu
-EB2 = sum(k*k*fk for k,fk in enumerate(f))
-VB = EB2 - EB*EB
-C2 = VB/EB/EB
-EL = (1+C2)/2*rho/(1-rho)*EB + rho/(1-rho)/2
+EB = sum(k * fk for k, fk in enumerate(f))
+rho = labda * EB / mu
+EB2 = sum(k * k * fk for k, fk in enumerate(f))
+VB = EB2 - EB * EB
+C2 = VB / EB / EB
+EL = (1 + C2) / 2 * rho / (1 - rho) * EB + rho / (1 - rho) / 2
 EL
 \end{pyconsole}
 
@@ -366,10 +375,10 @@ num = 100
 p = np.ones(num)
 
 for n in range(1, num):
- p[n] = labda / mu * sum(p[n - 1 - i] * G[i] for i in range(min(n, len(G))))
+    p[n] = labda / mu * sum(p[n - 1 - i] * G[i] for i in range(min(n, len(G))))
 
-p /= p.sum() # normalize
-EL = sum(n*p[n] for n in range(len(p)))
+p /= p.sum()  # normalize
+EL = sum(n * p[n] for n in range(len(p)))
 print(EL)
 \end{pyconsole}
 This does the job.

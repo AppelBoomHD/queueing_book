@@ -14,7 +14,7 @@
 
 As it turns out, many more single-server queueing situations than the $M/M/1$ queue can be analyzed by making a judicious choice of $\lambda(n)$ and $\mu(n)$ in the level-crossing equations~\cref{eq:25}.
 For these queueing systems, we just present the results.
-In first set of exercises are somewhat technical; we ask you to derive the formulas---the main challenge is not to make computational errors.
+The first set of exercises are somewhat technical; we ask you to derive the formulas---the main challenge is not to make computational errors.
 The second set of exercises shows how the combination of PASTA and Little's law allows us to analyze an astonishingly large number of non-trivial practical queueing situations.
 
 \opt{solutionfiles}{
@@ -28,7 +28,7 @@ It is important to realize that the inter-arrival times and service times need t
 \begin{equation*}
  \P{A_{A(t)+1} \leq t+s \given L(t) = n} = 1-e^{-\lambda(n) s},
 \end{equation*}
-where we use that $A_{A(t)}+g$ is the arrival time of the next job after time $t$.
+where we use that $A_{A(t)+1}$ is the arrival time of the next job after time $t$.
 Similarly, we assume for all $t$ and $s$,
 \begin{equation*}
  \P{D_{D(t)+1} \leq t+s \given L(t)=n} = 1-e^{-\mu(n) s}.

@@ -1,6 +1,15 @@
-\section{(Limits of) Empirical Performance Measures}
-\label{sec:limits-of-emperical}
+% arara: pdflatex
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex
+% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
 
+\documentclass[companion]{subfiles}
+
+\begin{document}
+
+
+\section{(Limits of) Empirical Performance Measures}
+\label{sec:limits-of-empirical}
 If the queueing system is rate-stable, we can sensibly define a number of long-run average performance measures such as the load, the average waiting time in queue, and so on. 
 This we do here and refer to \cref{fig:constructiongg1} for an overview of the relations between these performance measures.
 
@@ -169,37 +178,40 @@ The next exercise focuses on this problem.
 In such queueing systems, jobs arrive in batches, for instance, when $a_k=3$, three jobs arrive in slot $k$.
 Assuming that $L_{k-1}=5$, what queue length have these 3 arrivals seen?  
 
-Provide a definition similar to~\cref{eq:Qm} for the case in which we say that all arrivals see the same number in the system.
+Provide a definition similar to~\cref{eq:Qm} for the case in which we say that all arrivals of a batch see the same number in the system.
+For this, assume that the batch sees, upon arrival,  $L_{k-1} - d_k$ jobs in the system.
+In other words, we assume that in a period the served jobs first depart before new jobs arrive. 
+
+
 Provide another definition to express that the first of a batch of arrivals sees less jobs in the system than the last arrival of a batch. 
+(To get the details right is harder than you might think; I did it wrong several times.)
 \begin{hint}
 Realize that when jobs arrive in batches, the definition of loss fraction requires some care; not all definitions need to measure the same.
+
 \end{hint}
 \begin{solution} 
+Recall, we assume that arriving jobs in period $k$ cannot be served in period $k$. 
 
-Suppose that we don't want to distinguish between jobs in a batch, but simply want to say that if one job sees a long queue, all see a long queue.
-In that case,
+
+Suppose we do not want to distinguish between jobs in a batch; we only count a `success' when all $a_k$ jobs see $m$ or less in the system.
+Since, by assumption, the served jobs first depart before we let new jobs arrive, the first of the $a_k$ arriving jobs sees a queue length of $L_{k-1} - d_k$, the second $L_{k-1}-d_k + 1$, and so on, until the last job of the batch, which sees a queue length of $L_{k-1} - d_k + a_k -1$.
+(Thus, of all $a_k$ jobs, the last sees the largest queue.)
+Because we only a success if all jobs of the batch see a `small' queue, we only need to count batches when $L_{k-1}-d_k + a_k -1 \leq m$.
+But, $L_{k-1}-d_k + a_k = L_k-1$, so that
 \begin{equation*}
-\frac 1{A(n)}\sum_{k=1}^n a_k \1{L_k > m}.
+\frac 1{A(n)}\sum_{k=1}^n a_k \1{L_k-1 \leq m},
 \end{equation*}
+is the fraction we seek.
 
 
-For the second code, observe that, since we deal with a system in discrete time, $L_k$ is the queue length at the end of period~$k$.
-Thus, $\sum_{k=1}^n \1{L_k > m}$ counts the number of \emph{periods} that the queue is larger than $m$.
-This is of course not the same as the number of \emph{items} that see a queue larger than $m$; only when $a_k>0$ the items in a batch would see a queue $L_k>m$.
-Thus,
+
+For the second case, as long as $j$ is such that $L_{k-1}-d_k + j -1 \leq m$, all these $j$ jobs fit. Thus, of the $a_k$ jobs, a number of
 \begin{equation*}
-  \sum_{k=1}^n \1{L_k > m} \1{a_k > 0},
+  \max\{a_k, m+1 - L_{k-1} + d_k\}
 \end{equation*}
-counts the number of batches. 
-
-Next, by assumption, $a_k$ items arrive during period $k$.
-The first of these items sees a queue length of $L_{k-1} - d_k$, the second $L_{k-1}-d_k + 1$, and so on, until the last item, which sees a queue length of $L_k-1 = L_{k-1} - d_k + a_k -1$.
-Thus, of all items, the last item sees the largest queue.
-Hence, if $L_k \leq m$, all items of the batch see a queue less than $m$.
-If, however, $L_k > m$, then $L_k -m$ customers saw $m$ or more jobs in the system.
-Therefore, the fraction of arrivals that see a queue with $m$ or more jobs is equal to
+see at most $m$ in the system. And therefore, the performance measure becomes
 \begin{equation*}
- \frac 1 {A(n)} \sum_{k=1}^n (L_k - m) \1{L_k > m} .
+\frac 1{A(n)}\sum_{k=1}^n \max\{a_k, m+1-L_{k-1} + d_k\}.
 \end{equation*}
 
 Here is the code for the second case. 
@@ -218,11 +230,11 @@ print(L)
 
 m = 5
 
-res = 0
+tot = 0
 for k in range(1, len(a)):
-    res += (L[k] - m) * (L[k] - m)
+    tot += max(a[k], m+1 - L[k-1] +d[k])
 
-print(res, res / sum(a))
+print(tot, tot / sum(a))
 \end{pyconsole}
 
 \end{solution}
@@ -256,7 +268,7 @@ In this sense, finally,  we say that~$L_k \to L$. All this can be done, but we r
 }
 
 
-%\clearpage
+\end{document}
  
 
 
