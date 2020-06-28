@@ -204,38 +204,38 @@ But, $L_{k-1}-d_k + a_k = L_k-1$, so that
 is the fraction we seek.
 
 
-Below is not ok! I'll repair it.
-
-For the second case, as long as $j$ is such that $L_{k-1}-d_k + j -1 \leq m$, all these $j$ jobs fit. Thus, of the $a_k$ jobs, a number of
-\begin{equation*}
-  \min\{a_k, m+1 - L_{k-1} + d_k\}
-\end{equation*}
-see at most $m$ in the system. And therefore, the performance measure becomes
-\begin{equation*}
-\frac 1{A(n)}\sum_{k=1}^n \max\{a_k, m+1-L_{k-1} + d_k\}.
-\end{equation*}
+For the second case---which I found quite hard, and several of my attempts were wrong at first---observe that we can interpret this as a queue with `virtual' loss.
+As an example, suppose that $m=5$, $a_k = 7$, and $L_k=9$.
+If we would not accept the jobs in excess of $m=5$, then $L_k-m = 4$ would be lost of the $7$ that arrived.
+So, let us call $v_k = \max\{L_k-m, 0\}$ the virtual loss.
+Then, $w_k = \max{a_k-v_k, 0}$ are the jobs that are `virtually' accepted.
+In other words, $w_k$ jobs see $m$ or less in the system. 
 
 Here is the code for the second case. 
 \begin{pyconsole}
 a = [0, 2, 5, 1, 2]
-c = [0, 1, 1, 0, 0]
-
-d = [0] * len(a)
-L = [0] * len(a)
-
-for k in range(1, len(a)):
-    d[k] = min(L[k - 1], c[k])
-    L[k] = L[k - 1] + a[k] - d[k]
-
-print(L)
+c = [0, 1, 1, 1, 1]
 
 m = 5
 
+d = [0] * len(a)
+L = [0] * len(a)
+v = [0] * len(a)
+w = [0] * len(a)
+
 tot = 0
 for k in range(1, len(a)):
-    tot += max(a[k], m+1 - L[k-1] +d[k])
+    d[k] = min(L[k - 1], c[k])
+    L[k] = L[k - 1] + a[k] - d[k]
+    v[k] = max(L[k] - m, 0)
+    w[k] = max(a[k] - v[k], 0)
 
-print(tot, tot / sum(a))
+print(a)
+print(d)
+print(L)
+print(v)
+print(w)
+print(sum(w) / sum(a))
 \end{pyconsole}
 
 \end{solution}
