@@ -590,8 +590,9 @@ To relate these two `views', i.e., time-average versus observer-average, we need
 % (In the computations below I typically use the simplest, but often not the most efficient, code.)}.
 
 \begin{extra}[Hall 5.2] \label{exer: Hall} 
-After observing a single-server queue for several days, the following steady-state probabilities have been determined: $p(0)=0.4$, $p(1) = 0.3$, $p(2)=0.2$, $p(3)=0.05$ and $p(4)=0.05$.
- The arrival rate is 10 customers per hour.
+
+  After observing a single-server queue for several days, the following steady-state probabilities have been determined: $p(0)=0.4$, $p(1) = 0.3$, $p(2)=0.2$, $p(3)=0.05$ and $p(4)=0.05$.
+  The arrival rate is 10 customers per hour.
  \begin{enumerate}
  \item Determine $\E L$ and $\E{L_Q}$. 
  \item Using Little's formula, determine $\E W$ and $\E{W_Q}$.
@@ -648,14 +649,15 @@ sqrt(var_Lq)
 \end{pyconsole}
 
 
+Service time is sojourn time minus time in queue.
 \begin{pyconsole}
-mu = 1.0 / (W - Wq)
-1.0 / mu  # in minutes
+ES = W - Wq
 
-rho = labda / mu
+rho = labda * ES
 rho
 \end{pyconsole}
 
+The expected number of jobs at the server is the expected number in the system minus the the expected number in queue. Thus, 
 \begin{pyconsole}
 rho = EL - ELq
 rho
@@ -669,19 +671,16 @@ u
 \end{pyconsole}
 
 Yet another way: Suppose we have $m$ servers. If the system is empty,
-all $m$ servers are idle. If the system contains one customer, $m-1$
-servers are idle. Therefore, in general, the average fraction of time
-the server is idle is
+all $m$ servers are idle. If the system contains one customer, $1$
+server is busy, and so on. We therefore define the \emph{utilization of the station}  as
 \begin{equation*}
-1- u = \sum_{n=0}^\infty \max\{n-m, 0\} p_n,
+u = \sum_{n=0}^\infty \min\{n,m\} p_n.
 \end{equation*}
-as in the case there are more than $m$ customers in the system, the
-number of idle servers is $0$.
 
 
 \begin{pyconsole}
-idle = sum(max(m - n, 0) * P[n] for n in range(len(P)))
-idle
+u = sum(min(n, m) * P[n] for n in range(len(P)))
+u
 \end{pyconsole}
 
 \end{solution}
@@ -817,26 +816,32 @@ accepted
 \end{solution}
 \end{extra}
 
-\begin{extra}[Hall 5.3] After observing a queue with two servers for several days, the following steady-state probabilities have been determined: $p(0)=0.4$, $p(1) = 0.3$, $p(2)=0.2$, $p(3)=0.05$ and $p(4)=0.05$.
- The arrival rate is 10 customers per hour.
+\begin{exercise}[Hall 5.3]\clabel{ex:l-823}
+
+  After observing a queue with two servers for several days, the following steady-state probabilities have been determined: $p(0)=0.4$, $p(1) = 0.3$, $p(2)=0.2$, $p(3)=0.05$ and $p(4)=0.05$.
+  The arrival rate is 10 customers per hour.
  \begin{enumerate}
  \item Determine $\E L$ and $\E{L_Q}$. 
  \item Using Little's formula, determine $\E W$ and $\E{W_Q}$. 
  \item Determine $\V L$ and $\V{L_Q}$.
  \item Determine the service time and the utilization.
  \end{enumerate}
+ \begin{hint}
+   Solve \cref{exer: Hall} first.
+ \end{hint}
 \begin{solution}
  Determine $\E L$ and $\E{L_Q}$. 
 
 \begin{pyconsole}
 P = [0.4, 0.3, 0.2, 0.05, 0.05]
 
-c = 2
-Lq = sum((n - c) * P[n] for n in range(c, len(P)))
-Lq
 
 L = sum(n * P[n] for n in range(len(P)))
 L
+
+c = 2
+Lq = sum((n - c) * P[n] for n in range(c, len(P)))
+Lq
 \end{pyconsole}
 
  Using Little's formula, determine $\E W$ and $\E{W_Q}$. 
@@ -866,26 +871,31 @@ var_Lq
 
 Determine the service time and the utilization.
 \begin{pyconsole}
-mu = 1.0 / (W - Wq)
-1.0 / mu  # in minutes
+ES = W - Wq
+ES # in minutes
+\end{pyconsole}
 
-rho = labda / mu
+The load per server is given by:
+\begin{pyconsole}
+rho = labda * ES/c
 rho
 \end{pyconsole}
 
+The expected number of busy servers is 
 \begin{pyconsole}
-rho = L - Lq
-rho
+EBusy = L - Lq
+EBusy
 \end{pyconsole}
-This checks the previous line.
 
-The utilization must also by equal to the fraction of time the server is busy. 
+
+For the utilization, see  \cref{exer: Hall}. We now have $c=2x$ servers.
 \begin{pyconsole}
-u = 1 - P[0]
+u = sum(min(n, c) * P[n] for n in range(len(P)))
 u
 \end{pyconsole}
+And this matches with the above. 
 \end{solution}
-\end{extra} 
+\end{exercise} 
 
 \begin{extra}[Hall 5.8] The queueing system at a fast-food stand behaves in a peculiar fashion.
  When there is no one in the queue, people are reluctant to use the stand, fearing that the food is unsavory.
