@@ -159,17 +159,17 @@ In fact, this sometimes seems to be the policy at dentists or hospitals: do some
 Like this, in the example of a GP, the server (GP) does not have to wait for short times for patients that might be late, but instead can collect idle times into one long stretch, and do something useful instead.
 
 In this chapter we first study the $M/M/1$ queue and $M/G/1$ under a $N$-policy.
-As a second topic we study open networks of stations of $M/M/c$ stations and jobs arrive as a Poisson process.
+As a second topic we study open networks of $M/M/c$ stations and jobs arrive as a Poisson process.
 As we will see, the analysis of the $N$-policy requires to solve an equation of the type $v = c + P v$, where $v$ and $c$ are vectors and $P$ a (stochastic) matrix, while for the network we need to solve an equation of the type $\lambda = \gamma + \lambda P$, where $\lambda$ and $\gamma$ are vectors and $P$ is again a (stochastic) matrix.
 As these equations are (nearly) the same, we therefore concentrate in~\cref{sec:lambda-=-gamma} on the solution.
 The analysis in this chapter allows us to illustrate many tools and results of the previous chapters such as the renewal-reward theorem.
 In a sense, everything comes together here.
 
 We finally point out that the techniques developed in this chapter extend (way) beyond just queueing theory; they are worth memorizing.
-The concepts we introduce here can for instance be generalized to (optimal) stopping problems, which find many applications beyond queueing, such in finance, inventory theory, decision theory, and so on.
+The concepts we introduce here can for instance be generalized to (optimal) stopping problems, which find many applications beyond queueing, such as in finance, inventory theory, decision theory, and so on.
 As another set of extensions, it is possible to make the matrix $P$ and the vector $c$ depend on an action one can take in certain states.
 This idea underlies Markov decision theory, which in turn provides the theoretical basis of a number of machine learning tools such as $Q$ learning, reinforcement learning, and so on.
-Thus, while this chapter closes our journey on the study of queueing system, it is a first step toward a much longer journey on the diverse applications of the probability theory. 
+Thus, while this chapter closes our journey on the study of queueing systems, it is a first step toward a much longer journey on the diverse applications of the probability theory. 
 
 
 \subfile{n_policies_mm1.tex}
